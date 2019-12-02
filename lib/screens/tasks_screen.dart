@@ -1,9 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:todoey_flutter/widgets/task_list.dart';
+import 'package:todoey_flutter/models/task.dart';
+import 'package:todoey_flutter/widgets/tasks_list.dart';
+
 import 'add_task_screen.dart';
 
-class TasksScreen extends StatelessWidget {
-  final List<String> todoList = ["Buy milk", "Buy eggs", "Buy bread"];
+class TasksScreen extends StatefulWidget {
+  @override
+  _TasksScreenState createState() => _TasksScreenState();
+}
+
+class _TasksScreenState extends State<TasksScreen> {
+  List<Task> tasks = [
+    Task(name: 'Buy milk'),
+    Task(name: 'Buy eggs'),
+    Task(name: 'Buy bread'),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -11,7 +22,19 @@ class TasksScreen extends StatelessWidget {
       backgroundColor: Colors.lightBlueAccent,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          showModalBottomSheet(context: context, builder:(context) => AddTaskScreen());
+          showModalBottomSheet(
+            context: context,
+            builder: (context) => AddTaskScreen(
+              (newTaskTitle) {
+                setState(
+                  () {
+                    tasks.add(Task(name: newTaskTitle));
+                  },
+                );
+                Navigator.pop(context);
+              },
+            ),
+          );
         },
         child: Icon(Icons.add),
         backgroundColor: Colors.lightBlueAccent,
@@ -45,7 +68,7 @@ class TasksScreen extends StatelessWidget {
                       fontWeight: FontWeight.w700),
                 ),
                 Text(
-                  "12 Task",
+                  '${tasks.length.toString()} Tasks',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 18,
@@ -58,13 +81,16 @@ class TasksScreen extends StatelessWidget {
           // White part
           Expanded(
             child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        topRight: Radius.circular(20.0))),
-                child: new TasksList()),
+              padding: EdgeInsets.symmetric(horizontal: 20.0),
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20.0))),
+              child: TasksList(
+                tasks: tasks,
+              ),
+            ),
           ),
         ],
       ),
