@@ -1,11 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:todoey_flutter/widgets/task_list.dart';
+import 'add_task_screen.dart';
 
 class TasksScreen extends StatelessWidget {
+  final List<String> todoList = ["Buy milk", "Buy eggs", "Buy bread"];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.lightBlueAccent,
-      floatingActionButton: FloatingActionButton(onPressed: null, child: Icon(Icons.add), backgroundColor: Colors.lightBlueAccent,),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          showModalBottomSheet(context: context, builder:(context) => AddTaskScreen());
+        },
+        child: Icon(Icons.add),
+        backgroundColor: Colors.lightBlueAccent,
+      ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -44,16 +54,17 @@ class TasksScreen extends StatelessWidget {
               ],
             ),
           ),
-          
+
           // White part
           Expanded(
             child: Container(
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20.0))),
-            ),
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20.0))),
+                child: new TasksList()),
           ),
         ],
       ),
